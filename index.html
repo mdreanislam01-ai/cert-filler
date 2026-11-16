@@ -1,0 +1,64 @@
+
+
+<h1>জন্ম নিবন্ধন সনদ</h1>
+<div class="bar">
+  <button id="bFill" class="on">পূরণ করুন</button>
+  <button id="bCal">কো-অর্ডিনেট সেট</button>
+</div>
+
+
+<div id="fill">
+  <form id="f">
+    <fieldset><legend>সনদ তথ্য</legend>
+      <label>নিবন্ধন তারিখ</label><input type="date" name="reg_date">
+      <label>নিবন্ধন নম্বর</label><input name="reg_no">
+      <label>ইস্যু তারিখ</label><input type="date" name="issue_date">
+    </fieldset>
+    <fieldset><legend>জন্ম তথ্য</legend>
+      <label>জন্ম তারিখ</label><input type="date" name="dob">
+      <label>কথায়</label><input name="in_word" placeholder="যেমন: এক হাজার নয়শত নিরানব্বই">
+      <label>লিঙ্গ (বাংলা)</label><input name="sex_bn" value="পুরুষ">
+      <label>Sex (English)</label><input name="sex_en" value="Male">
+    </fieldset>
+    <fieldset><legend>নাম</legend>
+      <label>নাম (বাংলা)</label><input name="name_bn">
+      <label>Name (English)</label><input name="name_en">
+    </fieldset>
+    <fieldset><legend>মাতা</legend>
+      <label>মাতার নাম (বাংলা)</label><input name="mother_bn">
+      <label>Mother (English)</label><input name="mother_en">
+      <label>মাতার জাতীয়তা (বাংলা)</label><input name="mother_nat_bn" value="বাংলাদেশী">
+      <label>Nationality (English)</label><input name="mother_nat_en" value="Bangladeshi">
+    </fieldset>
+    <fieldset><legend>পিতা</legend>
+      <label>পিতার নাম (বাংলা)</label><input name="father_bn">
+      <label>Father (English)</label><input name="father_en">
+      <label>পিতার জাতীয়তা (বাংলা)</label><input name="father_nat_bn" value="বাংলাদেশী">
+      <label>Nationality (English)</label><input name="father_nat_en" value="Bangladeshi">
+    </fieldset>
+    <fieldset><legend>ঠিকানা</legend>
+      <label>জন্মস্থান (বাংলা)</label><input name="pob_bn">
+      <label>Place of Birth (English)</label><input name="pob_en">
+      <label>স্থায়ী ঠিকানা (বাংলা)</label><textarea name="addr_bn" rows="2"></textarea>
+      <label>Permanent Address (English)</label><input name="addr_en">
+    </fieldset>
+    <button class="go">সনদ তৈরি করুন</button>
+    <div id="st"></div>
+  </form>
+  <div id="prev"></div>
+</div>
+
+
+<div id="cal" hidden="">
+  <p id="hint">নিচের তালিকা থেকে একটা ঘর বেছে নিন, তারপর ছবির উপরে যেখানে ওই লেখা বসবে সেখানে আঙুল দিয়ে ট্যাপ করুন। লাল বিন্দু বসে যাবে। ভুল হলে আবার ট্যাপ করলেই সরে যাবে।</p>
+  <select id="pick"></select>
+  <div id="list"></div>
+  <div style="display:flex;gap:6px;margin-top:8px">
+    <button class="mini" id="exp">সেটিংস কপি</button>
+    <button class="mini" id="rst">রিসেট</button>
+  </div>
+  <div id="wrap"></div>
+</div>
+
+
+
