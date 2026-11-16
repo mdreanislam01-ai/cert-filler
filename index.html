@@ -1,11 +1,47 @@
-
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>জন্ম নিবন্ধন সনদ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{font-family:system-ui,"Noto Sans Bengali",sans-serif;margin:0;padding:12px;background:#ececee;font-size:14px}
+  h1{font-size:16px;margin:0 0 10px}
+  .bar{display:flex;gap:8px;margin-bottom:12px}
+  .bar button{flex:1;padding:12px;border:0;border-radius:8px;background:#d4d4d8;font-size:13px;font-weight:700}
+  .bar button.on{background:#111;color:#fff}
+  label{display:block;font-size:12px;margin:9px 0 3px;color:#444}
+  input,select,textarea{display:block;width:100%;padding:10px;border:1px solid #ccc;border-radius:7px;font-size:14px;font-family:inherit;background:#fff}
+  fieldset{border:1px solid #ddd;border-radius:10px;margin:12px 0;padding:10px;background:#fff}
+  legend{font-size:12px;font-weight:700;padding:0 6px}
+  .go{display:block;width:100%;padding:15px;font-size:15px;font-weight:700;background:#111;color:#fff;border:0;border-radius:9px;margin-top:14px}
+  #st{font-size:13px;margin-top:10px;padding:10px;border-radius:8px;background:#fff;border:1px solid #ddd;min-height:42px;line-height:1.5;word-break:break-word}
+  #err{background:#fee;border:1px solid #e11d48;color:#900;padding:10px;border-radius:8px;font-size:12px;margin-bottom:10px;line-height:1.5;white-space:pre-wrap}
+  #wrap{position:relative;background:#fff;line-height:0;border:1px solid #bbb}
+  #wrap canvas{display:block;width:100%}
+  .dot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#e11d48;box-shadow:0 0 0 2px #fff}
+  #hint{font-size:12px;color:#555;margin:8px 0;line-height:1.5}
+  .row{display:flex;gap:6px;align-items:center;margin-bottom:5px}
+  .row span{flex:1;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .row b{font-size:11px;font-variant-numeric:tabular-nums}
+  .row i{font-size:10px;color:#999;font-style:normal}
+  #list{max-height:38vh;overflow:auto;background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px;margin-top:8px}
+  iframe{width:100%;height:70vh;border:1px solid #bbb;background:#fff;margin-top:10px}
+  .mini{padding:10px;border:1px solid #ccc;border-radius:7px;background:#fff;font-size:12px;font-weight:700;flex:1}
+</style>
+</head>
+<body>
 
 <h1>জন্ম নিবন্ধন সনদ</h1>
+<div id="err" hidden></div>
+<div id="diag" style="font-size:12px;margin-bottom:10px"></div>
+
 <div class="bar">
   <button id="bFill" class="on">পূরণ করুন</button>
   <button id="bCal">কো-অর্ডিনেট সেট</button>
 </div>
-
 
 <div id="fill">
   <form id="f">
@@ -16,7 +52,7 @@
     </fieldset>
     <fieldset><legend>জন্ম তথ্য</legend>
       <label>জন্ম তারিখ</label><input type="date" name="dob">
-      <label>কথায়</label><input name="in_word" placeholder="যেমন: এক হাজার নয়শত নিরানব্বই">
+      <label>কথায়</label><input name="in_word">
       <label>লিঙ্গ (বাংলা)</label><input name="sex_bn" value="পুরুষ">
       <label>Sex (English)</label><input name="sex_en" value="Male">
     </fieldset>
@@ -42,23 +78,268 @@
       <label>স্থায়ী ঠিকানা (বাংলা)</label><textarea name="addr_bn" rows="2"></textarea>
       <label>Permanent Address (English)</label><input name="addr_en">
     </fieldset>
-    <button class="go">সনদ তৈরি করুন</button>
-    <div id="st"></div>
+    <button class="go" type="submit">সনদ তৈরি করুন</button>
+    <div id="st">এখানে ফলাফল দেখাবে</div>
   </form>
   <div id="prev"></div>
 </div>
 
-
-<div id="cal" hidden="">
-  <p id="hint">নিচের তালিকা থেকে একটা ঘর বেছে নিন, তারপর ছবির উপরে যেখানে ওই লেখা বসবে সেখানে আঙুল দিয়ে ট্যাপ করুন। লাল বিন্দু বসে যাবে। ভুল হলে আবার ট্যাপ করলেই সরে যাবে।</p>
+<div id="cal" hidden>
+  <p id="hint">তালিকা থেকে ঘর বেছে নিন, তারপর ছবির উপরে ঠিক জায়গায় ট্যাপ করুন। ভুল হলে আবার ট্যাপ করলে বিন্দু সরে যাবে।</p>
   <select id="pick"></select>
   <div id="list"></div>
   <div style="display:flex;gap:6px;margin-top:8px">
-    <button class="mini" id="exp">সেটিংস কপি</button>
-    <button class="mini" id="rst">রিসেট</button>
+    <button class="mini" id="exp" type="button">সেটিংস কপি</button>
+    <button class="mini" id="rst" type="button">রিসেট</button>
   </div>
   <div id="wrap"></div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  var TPL = "template.pdf";
+  var KEY = "certpos_v1";
+  var $ = function (s) { return document.querySelector(s); };
+  var errBox = $("#err"), st = $("#st");
 
+  function showErr(m) {
+    errBox.hidden = false;
+    errBox.textContent = errBox.textContent + m + "\n";
+  }
+  window.onerror = function (m) { showErr("ত্রুটি: " + m); };
+  window.addEventListener("unhandledrejection", function (e) {
+    showErr("ত্রুটি: " + ((e.reason && e.reason.message) || e.reason));
+  });
 
+  if (!window.PDFLib) showErr("pdf-lib লাইব্রেরি লোড হয়নি — ইন্টারনেট বা CDN ব্লক দেখুন।");
+  if (!window.pdfjsLib) showErr("pdf.js লাইব্রেরি লোড হয়নি — ইন্টারনেট বা CDN ব্লক দেখুন।");
+  if (window.pdfjsLib) window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
+
+  var FIELDS = [
+    { k:"reg_date",      l:"নিবন্ধন তারিখ",            s:9  },
+    { k:"reg_no",        l:"নিবন্ধন নম্বর",            s:9  },
+    { k:"issue_date",    l:"ইস্যু তারিখ",               s:9  },
+    { k:"dob",           l:"জন্ম তারিখ",                s:10 },
+    { k:"in_word",       l:"কথায়",                     s:9,  bn:1 },
+    { k:"name_bn",       l:"নাম (বাংলা)",               s:11, bn:1, w:190 },
+    { k:"name_en",       l:"Name (English)",            s:11, w:190 },
+    { k:"sex_bn",        l:"লিঙ্গ (বাংলা)",             s:9,  bn:1 },
+    { k:"sex_en",        l:"Sex (English)",             s:9  },
+    { k:"mother_bn",     l:"মাতার নাম (বাংলা)",         s:10, bn:1, w:150 },
+    { k:"mother_en",     l:"Mother (English)",          s:10, w:150 },
+    { k:"mother_nat_bn", l:"মাতার জাতীয়তা (বাংলা)",    s:9,  bn:1 },
+    { k:"mother_nat_en", l:"Nationality (English)",     s:9  },
+    { k:"father_bn",     l:"পিতার নাম (বাংলা)",         s:10, bn:1, w:150 },
+    { k:"father_en",     l:"Father (English)",          s:10, w:150 },
+    { k:"father_nat_bn", l:"পিতার জাতীয়তা (বাংলা)",    s:9,  bn:1 },
+    { k:"father_nat_en", l:"Nationality (English)",     s:9  },
+    { k:"pob_bn",        l:"জন্মস্থান (বাংলা)",         s:9,  bn:1, w:170 },
+    { k:"pob_en",        l:"Place of Birth (English)",  s:9,  w:170 },
+    { k:"addr_bn",       l:"স্থায়ী ঠিকানা (বাংলা)",    s:9,  bn:1, w:170 },
+    { k:"addr_en",       l:"Permanent Address (English)", s:9, w:170 }
+  ];
+
+  var PRESET = {
+    reg_date:{x:400,y:748}, reg_no:{x:400,y:724}, issue_date:{x:400,y:700},
+    dob:{x:150,y:655}, name_bn:{x:120,y:628}, name_en:{x:120,y:605},
+    sex_bn:{x:100,y:578}, sex_en:{x:100,y:558}, in_word:{x:150,y:535},
+    mother_bn:{x:120,y:495}, mother_en:{x:120,y:470},
+    mother_nat_bn:{x:210,y:470}, mother_nat_en:{x:210,y:448},
+    father_bn:{x:120,y:410}, father_en:{x:120,y:388},
+    father_nat_bn:{x:210,y:388}, father_nat_en:{x:210,y:365},
+    pob_bn:{x:130,y:322}, pob_en:{x:210,y:322},
+    addr_bn:{x:130,y:272}, addr_en:{x:130,y:248}
+  };
+
+  var pos = {};
+  try { pos = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { pos = {}; }
+  for (var pk in PRESET) if (!pos[pk]) pos[pk] = PRESET[pk];
+  try { localStorage.setItem(KEY, JSON.stringify(pos)); } catch (e) {}
+
+  var scale = 1, pageH = 842, selected = FIELDS[0].k, canvasEl = null;
+
+  // ---- টেমপ্লেট আছে কিনা ----
+  fetch(TPL, { method: "HEAD" }).then(function (r) {
+    $("#diag").innerHTML = r.ok
+      ? '<span style="color:#059669">টেমপ্লেট পাওয়া গেছে</span>'
+      : '<span style="color:#b91c1c">template.pdf পাওয়া যায়নি — রিপোতে আপলোড করুন</span>';
+  }).catch(function () {
+    $("#diag").innerHTML = '<span style="color:#b91c1c">টেমপ্লেট পরীক্ষা করা যায়নি</span>';
+  });
+
+  function mode(m) {
+    var cal = m === "cal";
+    $("#fill").hidden = cal;
+    $("#cal").hidden = !cal;
+    $("#bFill").className = cal ? "" : "on";
+    $("#bCal").className = cal ? "on" : "";
+    if (cal) drawCal();
+    window.scrollTo(0, 0);
+  }
+  $("#bFill").onclick = function () { mode("fill"); };
+  $("#bCal").onclick = function () { mode("cal"); };
+  if (location.search.indexOf("cal") > -1) mode("cal");
+
+  var pick = $("#pick");
+  FIELDS.forEach(function (f) {
+    var o = document.createElement("option");
+    o.value = f.k; o.textContent = f.l; pick.appendChild(o);
+  });
+  pick.onchange = function () { selected = pick.value; markList(); };
+
+  function markList() {
+    var box = $("#list");
+    box.innerHTML = "";
+    FIELDS.forEach(function (f) {
+      var p = pos[f.k];
+      var d = document.createElement("div");
+      d.className = "row";
+      d.innerHTML = '<span style="' + (f.k === selected ? "font-weight:700" : "") + '">' + f.l + '</span>' +
+        '<b>' + (p ? Math.round(p.x) + "," + Math.round(p.y) : "—") + '</b><i>' + f.s + 'pt</i>';
+      d.onclick = function () { selected = f.k; pick.value = f.k; markList(); };
+      box.appendChild(d);
+    });
+  }
+
+  function drawCal() {
+    var wrap = $("#wrap");
+    wrap.innerHTML = "";
+    if (!window.pdfjsLib) { wrap.innerHTML = "<p style='padding:12px'>pdf.js নেই</p>"; return; }
+    window.pdfjsLib.getDocument(TPL).promise.then(function (pdf) {
+      return pdf.getPage(1);
+    }).then(function (page) {
+      var base = page.getViewport({ scale: 1 });
+      pageH = base.height;
+      scale = (wrap.clientWidth || window.innerWidth - 24) / base.width;
+      var vp = page.getViewport({ scale: scale });
+      var c = document.createElement("canvas");
+      c.width = Math.round(vp.width);
+      c.height = Math.round(vp.height);
+      wrap.appendChild(c);
+      canvasEl = c;
+      return page.render({ canvasContext: c.getContext("2d"), viewport: vp }).promise.then(function () {
+        c.onclick = function (e) {
+          var r = c.getBoundingClientRect();
+          var px = e.clientX - r.left, py = e.clientY - r.top;
+          pos[selected] = { x: px / scale, y: pageH - py / scale };
+          try { localStorage.setItem(KEY, JSON.stringify(pos)); } catch (er) {}
+          markList(); drawDots();
+        };
+        drawDots();
+      });
+    }).catch(function (e) {
+      wrap.innerHTML = "<p style='color:#b91c1c;padding:12px'>PDF পড়া যাচ্ছে না: " + e.message + "</p>";
+    });
+    markList();
+  }
+
+  function drawDots() {
+    if (!canvasEl) return;
+    var old = canvasEl.parentNode.querySelectorAll(".dot");
+    for (var i = 0; i < old.length; i++) old[i].remove();
+    for (var k in pos) {
+      var p = pos[k];
+      var d = document.createElement("div");
+      d.className = "dot";
+      d.style.left = (p.x * scale) + "px";
+      d.style.top = ((pageH - p.y) * scale) + "px";
+      if (k !== selected) d.style.opacity = ".45";
+      canvasEl.parentNode.appendChild(d);
+    }
+  }
+
+  $("#rst").onclick = function () {
+    if (!confirm("সব পজিশন মুছে যাবে?")) return;
+    pos = {}; try { localStorage.setItem(KEY, "{}"); } catch (e) {}
+    drawDots(); markList();
+  };
+
+  $("#exp").onclick = function () {
+    var txt = "var PRESET = " + JSON.stringify(pos, null, 1) + ";";
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(function () {
+      alert("কপি হয়েছে। index.html-এ PRESET-এর জায়গায় বসান।");
+    }, function () { prompt("কপি করে রাখুন:", txt); });
+    else prompt("কপি করে রাখুন:", txt);
+  };
+
+  // ---- বাংলা লেখা ছবিতে ----
+  function bnPng(text, size) {
+    var mult = 8;
+    var fam = '"Noto Sans Bengali"';
+    return document.fonts.load(mult * size + "px " + fam).then(function () {
+      var c = document.createElement("canvas");
+      var m = c.getContext("2d");
+      m.font = mult * size + "px " + fam;
+      c.width = Math.ceil(m.measureText(text).width) + 24;
+      c.height = Math.ceil(size * mult * 1.7);
+      var g = c.getContext("2d");
+      g.font = mult * size + "px " + fam;
+      g.fillStyle = "#000";
+      g.fillText(text, 12, size * mult * 1.25);
+      return { url: c.toDataURL("image/png"), w: c.width / mult, h: c.height / mult };
+    });
+  }
+
+  $("#f").onsubmit = function (e) {
+    e.preventDefault();
+    if (!window.PDFLib) { st.textContent = "pdf-lib লোড হয়নি, পেজ রিফ্রেশ করুন।"; return; }
+    st.textContent = "তৈরি হচ্ছে…";
+
+    var fd = new FormData(e.target), data = {};
+    fd.forEach(function (v, k) {
+      if (!v) return;
+      data[k] = (k === "dob" || k.indexOf("_date") > -1)
+        ? String(v).split("-").reverse().join("/") : v;
+    });
+
+    fetch(TPL).then(function (r) {
+      if (!r.ok) throw new Error("template.pdf পাওয়া যাচ্ছে না (" + r.status + ")");
+      return r.arrayBuffer();
+    }).then(function (bytes) {
+      return PDFLib.PDFDocument.load(bytes);
+    }).then(function (pdf) {
+      var font = pdf.embedFont(PDFLib.StandardFonts.Helvetica);
+      var page = pdf.getPages()[0];
+      var black = PDFLib.rgb(0, 0, 0);
+
+      var chain = Promise.resolve();
+      FIELDS.forEach(function (f) {
+        chain = chain.then(function () {
+          var v = data[f.k], p = pos[f.k];
+          if (!v || !p) return;
+          if (f.bn) {
+            return bnPng(v, f.s).then(function (img) {
+              return pdf.embedPng(img.url).then(function (emb) {
+                var k = f.w ? Math.min(1, f.w / img.w) : 1;
+                page.drawImage(emb, {
+                  x: p.x, y: p.y - f.s * 0.3,
+                  width: img.w * k, height: img.h * k
+                });
+              });
+            });
+          }
+          page.drawText(v, { x: p.x, y: p.y, size: f.s, font: font, color: black, maxWidth: f.w });
+        });
+      });
+      return chain.then(function () { return pdf.save(); });
+    }).then(function (out) {
+      var blob = new Blob([out], { type: "application/pdf" });
+      var url = URL.createObjectURL(blob);
+      $("#prev").innerHTML =
+        '<a class="mini" style="display:block;text-align:center;margin-top:12px;padding:14px;background:#111;color:#fff;text-decoration:none;border-radius:8px" download="certificate.pdf" href="' + url + '">ফাইল ডাউনলোড</a>' +
+        '<iframe src="' + url + '"></iframe>';
+      st.textContent = "তৈরি হয়েছে — নিচে দেখুন";
+      $("#prev").scrollIntoView();
+    }).catch(function (err) {
+      st.textContent = "সমস্যা: " + err.message;
+      showErr(err.stack || err.message);
+    });
+  };
+})();
+</script>
+</body>
+</html>
